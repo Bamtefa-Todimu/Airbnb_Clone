@@ -4,11 +4,12 @@ import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
-import { TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 import * as SecureStore from 'expo-secure-store'
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
+import Colors from '@/constants/Colors';
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
@@ -103,7 +104,29 @@ function RootLayoutNav() {
          }} />
 
          <Stack.Screen name="listing/[id]" options={{
-          headerTitle:''
+          headerTitle:'',
+          headerTransparent:true,
+          headerLeft:(() => (
+            <TouchableOpacity style={{width: 40,
+                height: 40,
+                borderRadius: 50,
+                backgroundColor: 'white',
+                alignItems: 'center',
+                justifyContent: 'center',
+                }} onPress={() => router.back()}>
+              <Ionicons name='chevron-back' size={24} color={'#000'} />
+            </TouchableOpacity>
+          )),
+          headerRight:(() => 
+              <View style={styles.bar}>
+                <TouchableOpacity style={styles.roundButton} onPress={() => {}}>
+                  <Ionicons name="share-outline" size={22} color={'#000'} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.roundButton}>
+                  <Ionicons name="heart-outline" size={22} color={'#000'} />
+                </TouchableOpacity>
+              </View>
+          )
          }} />
 
          <Stack.Screen name="(modals)/booking" options={{
@@ -119,3 +142,22 @@ function RootLayoutNav() {
       </Stack>
   );
 }
+
+
+const styles = StyleSheet.create({
+  roundButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: Colors.primary,
+  },
+  bar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+})
